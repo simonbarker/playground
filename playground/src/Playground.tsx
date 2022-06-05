@@ -16,6 +16,8 @@ const StyledDraggable = styled(Draggable)`
   border: 0.1em solid ${(props) => props.theme.container.borderColor};
   display: flex;
   min-height: ${(props) => props.theme.container.minHeight};
+  border-radius: ${(props) => props.theme.container.borderRadius}px;
+  background-color: #151f28;
 
   ${media.phone} {
     flex-direction: column;
@@ -37,7 +39,7 @@ const Playground: FC<IProps> = ({
   id: userId,
   initialSnippet,
   defaultEditorTab = "markup",
-  defaultResultTab = "result",
+  defaultResultTab = "console",
   transformJs = false,
   presets = [],
   theme,
@@ -50,6 +52,12 @@ const Playground: FC<IProps> = ({
     setSnippet((snippet) => ({
       ...snippet,
       [type]: changed,
+    }));
+  };
+
+  const onResetHandler = () => {
+    setSnippet(() => ({
+      ...initialSnippet,
     }));
   };
 
@@ -73,6 +81,7 @@ const Playground: FC<IProps> = ({
               defaultTab={defaultResultTab}
               transformJs={transformJs}
               presets={presets}
+              onResetHandler={onResetHandler}
             />
           )}
         />

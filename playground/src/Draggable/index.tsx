@@ -12,6 +12,12 @@ const Container = styled("div", forwardRef)`
 const DividerContainer = styled("div", forwardRef)`
   width: ${(props) => props.theme.divider.containerWidth}px;
   background-color: ${(props) => props.theme.divider.dividerBackground};
+  cursor: col-resize;
+  transition: 0.3s;
+
+  &:hover {
+    background-color: ${(props) => props.theme.divider.dividerBackgroundHover};
+  }
 `;
 
 const Divider = styled("div", forwardRef)`
@@ -42,8 +48,8 @@ const Draggable: FC<IProps> = ({ className = "", leftChild, rightChild }) => {
   return (
     <Container className={className} ref={containerRef}>
       {leftChild(leftWidth)}
-      <DividerContainer>
-        <Divider ref={dividerRef} />
+      <DividerContainer ref={dividerRef}>
+        <Divider />
       </DividerContainer>
       {rightChild(rightWidth)}
     </Container>

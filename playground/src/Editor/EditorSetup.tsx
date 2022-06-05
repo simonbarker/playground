@@ -1,13 +1,13 @@
 import React, { FC, Fragment } from "react";
 import SimpleEditor from "react-simple-code-editor";
 import Highlight, { defaultProps } from "prism-react-renderer";
-import theme from "prism-react-renderer/themes/nightOwl";
+import theme from "prism-react-renderer/themes/dracula";
 import { styled } from "goober";
 
 import { IEditorTabs } from "../types";
 
 const EditorWrapper = styled("div")`
-  background-color: ${(props) => props.theme.editor.backgroundColor};
+  background-color: transparent;
   color: ${(props) => props.theme.editor.color};
   overflow-y: auto !important;
   font-family: ${(props) => props.theme.editor.fontFamily};

@@ -8,6 +8,8 @@ import ErrorDisplay from "./ErrorDisplay";
 const Container = styled("div")`
   position: relative;
   height: 100%;
+  background-color: white;
+  border-radius: 0 0 ${(props) => props.theme.container.borderRadius}px 0;
 `;
 
 interface IProps {
