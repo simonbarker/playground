@@ -79,18 +79,18 @@ export const TabSpace = styled("div")`
 export const ATCToolTipStyled = styled("div")`
   font-family: Consolas, Menlo, Monaco, source-code-pro, Courier New, monospace;
   position: absolute;
-  top: ${(props) => props.y - 40}px;
+  top: ${(props) => props.y - props.childHeight / 2}px;
   left: ${(props) => props.x}px;
-  min-width: 200px;
   max-width: 400px;
   background-color: #fa9a1b;
-  padding: 5px;
+  padding: 5px 10px;
   font-size: 1rem;
   border-radius: 3px;
   color: white;
-  transform: translateX(calc(-50% + 10px));
+  transform: translateX(calc(-50% + ${(props) => props.childWidth / 2}px));
   z-index: 99999999;
   text-align: center;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
 `;
 
 export const ATCTipPointer = styled("i")`
