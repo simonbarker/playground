@@ -1,5 +1,5 @@
 {
-  "name": "playground-workspace",
+  "name": "@allthecode/playground-workspace",
   "private": true,
   "license": "MIT",
   "scripts": {
