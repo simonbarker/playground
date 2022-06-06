@@ -2,6 +2,8 @@ import { styled } from "goober";
 import { FC } from "react";
 import { MutableRefObject } from "react";
 import { useEffect, useRef, useState } from "react";
+import { CSSTransition } from "react-transition-group";
+import "../styles.css";
 
 interface TTProps {
   message: string;
@@ -19,8 +21,8 @@ export const ATCToolTip: FC<TTProps> = ({
   const [currentRef, setCurrentRef] = useState<MutableRefObject<any> | null>();
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
-  const [childWidth, setChildWidth] = useState(0);
-  const [childHeight, setChildHeight] = useState(0);
+  const [offsetWidth, setOffsetWidth] = useState(0);
+  const [offsetHeight, setOffsetHeight] = useState(0);
 
   const ref = useRef(null);
 
@@ -30,8 +32,8 @@ export const ATCToolTip: FC<TTProps> = ({
         const boundingBox = currentRef.current.getBoundingClientRect();
         setX(boundingBox.x);
         setY(boundingBox.y);
-        setChildWidth(boundingBox.width);
-        setChildHeight(boundingBox.height);
+        setOffsetWidth(boundingBox.width);
+        setOffsetHeight(boundingBox.height);
         setShowToolTip(true);
       }, delay);
       setTimeoutId(timeout);
@@ -43,17 +45,23 @@ export const ATCToolTip: FC<TTProps> = ({
 
   return (
     <>
-      {showToolTip ? (
+      <CSSTransition
+        in={showToolTip}
+        timeout={300}
+        classNames="alert"
+        unmountOnExit
+      >
         <ATCToolTipStyled
           x={x}
           y={y}
-          childWidth={childWidth}
-          childHeight={childHeight}
+          offsetwidth={offsetWidth}
+          offsetheight={offsetHeight}
         >
           <div>{message}</div>
           <ATCTipPointer />
         </ATCToolTipStyled>
-      ) : null}
+      </CSSTransition>
+
       <div
         ref={ref}
         onMouseEnter={(event) => {
@@ -75,7 +83,7 @@ export const ATCToolTip: FC<TTProps> = ({
 const ATCToolTipStyled = styled("div")`
   font-family: Consolas, Menlo, Monaco, source-code-pro, Courier New, monospace;
   position: absolute;
-  top: ${(props) => props.y - props.childHeight / 2}px;
+  top: ${(props) => props.y - props.offsetheight / 2}px;
   left: ${(props) => props.x}px;
   max-width: 400px;
   background-color: #fa9a1b;
@@ -83,7 +91,7 @@ const ATCToolTipStyled = styled("div")`
   font-size: 1rem;
   border-radius: 3px;
   color: white;
-  transform: translateX(calc(-50% + ${(props) => props.childWidth / 2}px));
+  transform: translateX(calc(-50% + ${(props) => props.offsetwidth / 2}px));
   z-index: 99999999;
   text-align: center;
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
