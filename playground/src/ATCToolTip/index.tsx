@@ -1,13 +1,20 @@
+import React, { useEffect, useRef, useState } from "react";
 import { styled } from "goober";
 import { FC } from "react";
 import { MutableRefObject } from "react";
-import { useEffect, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import "../styles.css";
 
 interface TTProps {
   message: string;
   delay?: number;
+}
+
+interface StyledProps {
+  x: number;
+  y: number;
+  offsetheight: number;
+  offsetwidth: number;
 }
 
 export const ATCToolTip: FC<TTProps> = ({
@@ -80,7 +87,7 @@ export const ATCToolTip: FC<TTProps> = ({
   );
 };
 
-const ATCToolTipStyled = styled("div")`
+const ATCToolTipStyled = styled("div")<StyledProps>`
   font-family: Consolas, Menlo, Monaco, source-code-pro, Courier New, monospace;
   position: absolute;
   top: ${(props) => props.y - props.offsetheight / 2}px;

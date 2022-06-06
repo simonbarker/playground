@@ -1,6 +1,7 @@
 {
-  "name": "@allthecode/playground-workspace",
+  "version": "0.0.2",
   "private": true,
+  "name": "@allthecode/playground-workspace",
   "license": "MIT",
   "scripts": {
     "start": "yarn workspace @agney/playground start",

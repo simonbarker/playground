@@ -114,6 +114,7 @@ export const theme = {
     background: "",
     dividerBackground: "",
     containerWidth: 8,
+    dividerBackgroundHover: "",
   },
   editor: {
     fontFamily: `Consolas, Menlo, Monaco, source-code-pro, Courier New, monospace`,
