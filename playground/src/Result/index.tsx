@@ -1,4 +1,6 @@
 import React, { FC, useMemo, useEffect, useState } from "react";
+import { MutableRefObject } from "react";
+import { useRef } from "react";
 
 import {
   StyledTabList,
@@ -8,6 +10,8 @@ import {
   StyledTabs,
   TabButton,
   TabSpace,
+  ATCToolTipStyled,
+  ATCTipPointer,
 } from "../TabStyles";
 import { ISnippet, ITabConfig, IResultTabs } from "../types";
 import Console from "./Console";
@@ -22,6 +26,22 @@ interface IProps {
   width: number;
   onResetHandler: () => void;
 }
+
+interface TTProps {
+  x: number;
+  y: number;
+  show: boolean;
+  message: string;
+}
+
+const ATCToolTip: FC<TTProps> = ({ x, y, show, message }) => {
+  return show ? (
+    <ATCToolTipStyled x={x} y={y}>
+      <div>{message}</div>
+      <ATCTipPointer />
+    </ATCToolTipStyled>
+  ) : null;
+};
 
 const Result: FC<IProps> = ({
   id,
@@ -48,8 +68,6 @@ const Result: FC<IProps> = ({
             data.data.source === `frame-${id}` &&
             data.data.message.type === "log"
           ) {
-            console.log(data.data.message.data);
-
             setLogs((prevLogs) => [...prevLogs, ...data.data.message.data]);
           }
         });
@@ -57,25 +75,64 @@ const Result: FC<IProps> = ({
     }
     waitForMessage();
   }, [id]);
+
+  /* tool tip code */
+  const [tooltipTimer, setToolTipTimer] = useState(false);
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | false>(false);
+  const [showToolTip, setShowToolTip] = useState(false);
+  const [toolTipMessage, setToolTipMessage] = useState("");
+  const [currentRef, setCurrentRef] = useState<MutableRefObject<any> | null>();
+  const [x, setX] = useState(0);
+  const [y, setY] = useState(0);
+
+  const ref1 = useRef(null);
+  const ref2 = useRef(null);
+
+  useEffect(() => {
+    if (tooltipTimer) {
+      const timeout = setTimeout(() => {
+        const boundingBox = currentRef.current.getBoundingClientRect();
+        setX(boundingBox.x);
+        setY(boundingBox.y);
+        setShowToolTip(true);
+      }, 1000);
+      setTimeoutId(timeout);
+    } else {
+      clearTimeout(timeoutId as NodeJS.Timeout);
+      setTimeoutId(false);
+    }
+  }, [tooltipTimer]);
+  /* tool tip code */
+
   return (
     <StyledTabs
       defaultIndex={tabs.findIndex((tab) => tab.value === defaultTab)}
       style={{ width: width }}
     >
+      <ATCToolTip x={x} y={y} show={showToolTip} message={toolTipMessage} />
       <StyledTabList>
         {tabs.map((tab) => (
           <StyledTab key={tab.value}>{tab.name}</StyledTab>
         ))}
         <TabSpace />
         <TabButton
-          onMouseEnter={() => {
-            console.log("here");
+          onMouseEnter={(event) => {
+            setToolTipMessage("Clear terminal");
+            setToolTipTimer(true);
+            setCurrentRef(ref1);
+          }}
+          onMouseLeave={() => {
+            setToolTipTimer(false);
+            setToolTipMessage("");
+            setShowToolTip(false);
+            setCurrentRef(null);
           }}
           onClick={() => {
             setLogs([]);
           }}
         >
           <svg
+            ref={ref1}
             xmlns="http://www.w3.org/2000/svg"
             fill="currentColor"
             viewBox="0 0 576 512"
@@ -83,8 +140,22 @@ const Result: FC<IProps> = ({
             <path d="M9.372 86.63C-3.124 74.13-3.124 53.87 9.372 41.37C21.87 28.88 42.13 28.88 54.63 41.37L246.6 233.4C259.1 245.9 259.1 266.1 246.6 278.6L54.63 470.6C42.13 483.1 21.87 483.1 9.372 470.6C-3.124 458.1-3.124 437.9 9.372 425.4L178.7 256L9.372 86.63zM544 416C561.7 416 576 430.3 576 448C576 465.7 561.7 480 544 480H256C238.3 480 224 465.7 224 448C224 430.3 238.3 416 256 416H544z" />
           </svg>
         </TabButton>
-        <TabButton onClick={onResetHandler}>
+        <TabButton
+          onClick={onResetHandler}
+          onMouseEnter={(event) => {
+            setToolTipMessage("Reset code");
+            setToolTipTimer(true);
+            setCurrentRef(ref2);
+          }}
+          onMouseLeave={() => {
+            setToolTipTimer(false);
+            setToolTipMessage("");
+            setShowToolTip(false);
+            setCurrentRef(null);
+          }}
+        >
           <svg
+            ref={ref2}
             xmlns="http://www.w3.org/2000/svg"
             fill="currentColor"
             viewBox="0 0 512 512"

@@ -36,6 +36,12 @@ export const StyledTab = styled(Tab)`
     background: rgba(255, 255, 255, 0.2);
     border-radius: 6px;
   }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    transition: 0.3s;
+  }
 `;
 
 export const StyledTabPanels = styled(TabPanels)`
@@ -58,8 +64,51 @@ export const TabButton = styled("div")`
   color: ${(props) => props.theme.tabs.tabHeader.color};
   width: 20px;
   height: 20px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    transition: 0.3s;
+  }
 `;
 
 export const TabSpace = styled("div")`
   flex-grow: 1;
+`;
+
+export const ATCToolTipStyled = styled("div")`
+  font-family: Consolas, Menlo, Monaco, source-code-pro, Courier New, monospace;
+  position: absolute;
+  top: ${(props) => props.y - 40}px;
+  left: ${(props) => props.x}px;
+  min-width: 200px;
+  max-width: 400px;
+  background-color: #fa9a1b;
+  padding: 5px;
+  font-size: 1rem;
+  border-radius: 3px;
+  color: white;
+  transform: translateX(calc(-50% + 10px));
+  z-index: 99999999;
+  text-align: center;
+`;
+
+export const ATCTipPointer = styled("i")`
+  position: absolute;
+  top: 100%;
+  width: 30px;
+  height: 15px;
+  overflow: hidden;
+  transform: translateX(calc(-50%));
+
+  &:after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    background-color: #fa9a1b;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+  }
 `;
